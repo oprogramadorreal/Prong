@@ -1,3 +1,7 @@
+/**
+ *  Este jogo foi desenvolvido por Bruno Vinícius.
+ **/
+
 using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
