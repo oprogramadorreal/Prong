@@ -1,94 +1,116 @@
-﻿using OpenTK;
+using System;
+using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 
-namespace Prong
+namespace testekkk
 {
     class Program : GameWindow
     {
-        int xDaBola = 0;
-        int yDaBola = 0;
-        int tamanhoDaBola = 20;
-        int velocidadeDaBolaEmX = 3;
-        int velocidadeDaBolaEmY = 3;
 
-        int yDoJogador1 = 0;
-        int yDoJogador2 = 0;
+        float xDaBola = 0;
+        float yDaBola = 0;
+        float tamanhoDaBola = 20;
+        float velocidadeDaBolaEmX = 3;
+        float velocidadeDaBolaEmY = 3;
 
-        int xDoJogador1()
-        {
-            return -ClientSize.Width / 2 + larguraDosJogadores() / 2;
-        }
+        float yDoJogador = -200;
+        float xDoJogador = 0;
+        float tamanhoDoJogador = 40;
 
-        int xDoJogador2()
-        {
-            return ClientSize.Width / 2 - larguraDosJogadores() / 2;
-        }
+        float novoTamanhoDaBola = -2;
 
-        int larguraDosJogadores()
-        {
-            return tamanhoDaBola;
-        }
-
-        int alturaDosJogadores()
-        {
-            return 3 * tamanhoDaBola;
-        }
+        float yDoInimigo = 0;
+        float xDoInimigo = 0;
+        float tamanhoDoInimigo = 60;
+        float velocidadeDoInimigoEmX = 7;
+        float velocidadeDoInimigoEmY = 7;
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             xDaBola = xDaBola + velocidadeDaBolaEmX;
             yDaBola = yDaBola + velocidadeDaBolaEmY;
-
-            if (xDaBola + tamanhoDaBola / 2 > xDoJogador2() - larguraDosJogadores() / 2
-             && yDaBola - tamanhoDaBola / 2 < yDoJogador2 + alturaDosJogadores() / 2
-             && yDaBola + tamanhoDaBola / 2 > yDoJogador2 - alturaDosJogadores() / 2)
+            if (yDaBola + tamanhoDaBola / 2 > ClientSize.Height / 2 || yDaBola - tamanhoDaBola / 2 < -ClientSize.Height / 2)
+            {
+                velocidadeDaBolaEmY = -velocidadeDaBolaEmY;
+            }
+            if (xDaBola + tamanhoDaBola / 2 > ClientSize.Width / 2 || xDaBola - tamanhoDaBola / 2 < -ClientSize.Width / 2)
             {
                 velocidadeDaBolaEmX = -velocidadeDaBolaEmX;
             }
 
-            if (xDaBola - tamanhoDaBola / 2 < xDoJogador1() + larguraDosJogadores() / 2
-             && yDaBola - tamanhoDaBola / 2 < yDoJogador1 + alturaDosJogadores() / 2
-             && yDaBola + tamanhoDaBola / 2 > yDoJogador1 - alturaDosJogadores() / 2)
-            {
-                velocidadeDaBolaEmX = -velocidadeDaBolaEmX;
-            }
-
-            if (yDaBola + tamanhoDaBola / 2 > ClientSize.Height / 2)
-            {
-                velocidadeDaBolaEmY = -velocidadeDaBolaEmY;
-            }
-
-            if (yDaBola - tamanhoDaBola / 2 < -ClientSize.Height / 2)
-            {
-                velocidadeDaBolaEmY = -velocidadeDaBolaEmY;
-            }
-
-            if (xDaBola < -ClientSize.Width / 2 || xDaBola > ClientSize.Width / 2)
+            if (xDaBola + tamanhoDaBola / 2 > xDoJogador - tamanhoDoJogador / 2
+                && xDaBola - tamanhoDaBola / 2 < xDoJogador + tamanhoDoJogador / 2
+                && yDaBola + tamanhoDaBola / 2 > yDoJogador - tamanhoDoJogador / 2
+                && yDaBola - tamanhoDaBola / 2 < yDoJogador + tamanhoDoJogador / 2)
             {
                 xDaBola = 0;
                 yDaBola = 0;
+                tamanhoDoJogador = tamanhoDoJogador + 8.5f;
+                velocidadeDoInimigoEmX = velocidadeDoInimigoEmX + 2.5f;
+                velocidadeDoInimigoEmY = velocidadeDoInimigoEmY + 2.5f;
+
+                if (tamanhoDoJogador >= 200)
+                {
+                    tamanhoDoJogador = 200;
+                }
             }
 
-            if (Keyboard.GetState().IsKeyDown(Key.W))
+            xDoInimigo = xDoInimigo + velocidadeDoInimigoEmX;
+            yDoInimigo = yDoInimigo + velocidadeDoInimigoEmY;
+            if (xDoInimigo + tamanhoDoInimigo / 2 > ClientSize.Width / 2 || xDoInimigo - tamanhoDoInimigo / 2 < -ClientSize.Width / 2)
             {
-                yDoJogador1 = yDoJogador1 + 5;
+                velocidadeDoInimigoEmX = -velocidadeDoInimigoEmX;
+            }
+            if (yDoInimigo + tamanhoDoInimigo / 2 > ClientSize.Height / 2 || yDoInimigo - tamanhoDoInimigo / 2 < -ClientSize.Height / 2)
+            {
+                velocidadeDoInimigoEmY = -velocidadeDoInimigoEmY;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Key.S))
+            if (xDoJogador + tamanhoDoJogador / 2 > xDoInimigo - tamanhoDoInimigo / 2
+                && xDoJogador - tamanhoDoJogador / 2 < xDoInimigo + tamanhoDoInimigo / 2
+                && yDoJogador + tamanhoDoJogador / 2 > yDoInimigo - tamanhoDoInimigo / 2
+                && yDoJogador - tamanhoDoJogador / 2 < yDoInimigo + tamanhoDoInimigo / 2)
             {
-                yDoJogador1 = yDoJogador1 - 5;
+                tamanhoDoJogador = tamanhoDoJogador + novoTamanhoDaBola;
+                if (tamanhoDoJogador <= 10)
+                {
+                    tamanhoDoJogador = 10;
+                }
             }
+
+
+            if (xDoJogador - tamanhoDoJogador / 2 < -ClientSize.Width / 2
+                || xDoJogador + tamanhoDoJogador / 2 > ClientSize.Width / 2)
+            {
+                xDoJogador = -xDoJogador;
+            }
+            if (yDoJogador - tamanhoDoJogador / 2 < -ClientSize.Height / 2
+                || yDoJogador + tamanhoDoJogador / 2 > ClientSize.Height / 2)
+            {
+                yDoJogador = -yDoJogador;
+            }
+
 
             if (Keyboard.GetState().IsKeyDown(Key.Up))
             {
-                yDoJogador2 = yDoJogador2 + 5;
+                yDoJogador = yDoJogador + 5;
             }
-
             if (Keyboard.GetState().IsKeyDown(Key.Down))
             {
-                yDoJogador2 = yDoJogador2 - 5;
+                yDoJogador = yDoJogador - 5;
             }
+
+            if (Keyboard.GetState().IsKeyDown(Key.Right))
+            {
+                xDoJogador = xDoJogador + 5;
+            }
+            if (Keyboard.GetState().IsKeyDown(Key.Left))
+            {
+                xDoJogador = xDoJogador - 5;
+            }
+
+
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -101,15 +123,16 @@ namespace Prong
 
             GL.Clear(ClearBufferMask.ColorBufferBit);
 
-            DesenharRetangulo(xDaBola, yDaBola, tamanhoDaBola, tamanhoDaBola, 1.0f, 1.0f, 0.0f);
-            DesenharRetangulo(xDoJogador1(), yDoJogador1, larguraDosJogadores(), alturaDosJogadores(), 1.0f, 0.0f, 0.0f);
-            DesenharRetangulo(xDoJogador2(), yDoJogador2, larguraDosJogadores(), alturaDosJogadores(), 0.0f, 0.0f, 1.0f);
+            DesenharRetangulo(xDaBola, yDaBola, tamanhoDaBola, tamanhoDaBola, 0.0f, 1.0f, 0.0f);
+            DesenharRetangulo(xDoJogador, yDoJogador, tamanhoDoJogador, tamanhoDoJogador, 0.0f, 0.0f, 1.0f);
+            DesenharRetangulo(xDoInimigo, yDoInimigo, tamanhoDoInimigo, tamanhoDoInimigo, 1.0f, 0.0f, 0.0f);
 
             SwapBuffers();
         }
 
-        void DesenharRetangulo(int x, int y, int largura, int altura, float r, float g, float b)
+        void DesenharRetangulo(float x, float y, float largura, float altura, float r, float g, float b)
         {
+
             GL.Color3(r, g, b);
 
             GL.Begin(PrimitiveType.Quads);
